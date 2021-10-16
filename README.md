@@ -2,6 +2,9 @@
 
 Simple To-Do's app built in React Native using EXPO CLI.
 
+Add tasks by typing and pressing the "+" button.
+Remove tasks by tapping on individual task.
+
 
 To test app:
 
