@@ -1,6 +1,6 @@
 # todosRN
 
-Simple To-Do's app built with React Native using EXPO CLI.
+Simple To-Do's app built in React Native using EXPO CLI.
 
 
 To test app:
