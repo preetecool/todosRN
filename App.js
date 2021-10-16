@@ -1,6 +1,7 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -12,25 +13,51 @@ import {
 import Task from "./components/Task";
 
 export default function App() {
+  const [task, setTask] = useState();
+  const [allTasks, setAllTasks] = useState([]);
+
+  const handleTaskAdding = () => {
+    Keyboard.dismiss();
+    setAllTasks([...allTasks, task]);
+    setTask(null);
+  };
+
+  const doneTask = (index) => {
+    let taskCopy = [...allTasks];
+    taskCopy.splice(index, 1);
+    setAllTasks(taskCopy);
+  };
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.taskWrapper}>
           <Text style={styles.sectionTitle}>Your tasks</Text>
           <View style={styles.items}>
-            <Task text={"Task 1"} />
+            {allTasks.map((aTask, index) => {
+              return (
+                <>
+                  <TouchableOpacity key={index} onPress={() => doneTask(index)}>
+                    <Task text={aTask} />
+                  </TouchableOpacity>
+                </>
+              );
+            })}
           </View>
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          styles={styles.writeTaskWrap}
+          style={styles.writeTaskWrap}
         >
           <TextInput
             style={styles.input}
             placeholder={"What am I doing today?"}
             ceh
-          ></TextInput>
-          <TouchableOpacity>
+            value={task}
+            onChangeText={(text) => setTask(text)}
+          />
+
+          <TouchableOpacity onPress={() => handleTaskAdding()}>
             <View style={styles.addTaskWrap}>
               <Text style={styles.addText}>+</Text>
             </View>
@@ -62,14 +89,26 @@ const styles = StyleSheet.create({
     bottom: 60,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
   },
   input: {
+    width: 250,
+    borderBottomColor: "#c0c0c0",
+    borderBottomWidth: 0.5,
     paddingVertical: 15,
-    paddingHorizontal: 15,
-    width: 200,
+    paddingHorizontal: 1,
   },
-  addTaskWrap: {},
-  addText: {},
+  addTaskWrap: {
+    width: 60,
+    height: 60,
+    borderRadius: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#c0c0c0",
+    borderWidth: 0.5,
+  },
+  addText: {
+    fontSize: 24,
+  },
 });
